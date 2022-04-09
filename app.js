@@ -12,27 +12,27 @@ const InvoiceProd = require('./models/invoice_prods');
 app.use(cors());
 dotenv.config();
 
-//  const dbUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.zmfny.mongodb.net/invoice_system?retryWrites=true&w=majority`
+ const dbUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.zmfny.mongodb.net/invoice_system?retryWrites=true&w=majority`
 
 // const dbUri = 'mongodb://localhost:27017/invoice_system';
 
 var port = process.env.PORT || 3000;
 
-// mongoose.connect(dbUri)
-//     .then((result) =>{
-//         app.listen(port)
-//     })
-//     .catch((err) => console.log('error occured'));
+mongoose.connect(dbUri)
+    .then((result) =>{
+        app.listen(port)
+    })
+    .catch((err) => console.log('error occured'));
 
 app.get('/', (req, res) => {
     
-    res.send('Heloo');
+    res.send('New port');
     
 });
 
-app.listen(port, () => {
-    console.log("Server running")
-});
+// app.listen(port, () => {
+//     console.log("Server running")
+// });
 
 
 app.get('/company', (req, res) =>{
