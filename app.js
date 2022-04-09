@@ -14,8 +14,6 @@ dotenv.config();
 
  const dbUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.zmfny.mongodb.net/invoice_system?retryWrites=true&w=majority`
 
-// const dbUri = 'mongodb://localhost:27017/invoice_system';
-
 var port = process.env.PORT || 3000;
 
 mongoose.connect(dbUri)
@@ -29,10 +27,6 @@ app.get('/', (req, res) => {
     res.send('New port');
     
 });
-
-// app.listen(port, () => {
-//     console.log("Server running")
-// });
 
 
 app.get('/company', (req, res) =>{
@@ -63,7 +57,7 @@ app.get('/add-item', (req, res) => {
             console.log(err);
         });
 
-        // res.redirect('http://127.0.0.1:5555/customers');
+        res.redirect('https://jasons-invoice.herokuapp.com/customers');
 }); 
 
 app.get('/all-items', (req, res) =>{
@@ -85,7 +79,7 @@ app.get('/products', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('http://127.0.0.1:5555/products.html');
+        res.redirect('https://jasons-invoice.herokuapp.com/products.html');
 });
 
 
@@ -157,7 +151,7 @@ app.get('/add-product', (req, res) => {
             console.log(err);
         });
 
-        // res.redirect('http://127.0.0.1:5555/products.html');
+        res.redirect('https://jasons-invoice.herokuapp.com/products.html');
 });
 
 app.get('/delete-product', (req, res) =>{
@@ -167,7 +161,7 @@ app.get('/delete-product', (req, res) =>{
         console.log(err);
     });
 
-    // res.redirect('http://127.0.0.1:5555/products.html');
+    res.redirect('https://jasons-invoice.herokuapp.com/products.html');
 });
 
 
@@ -178,7 +172,7 @@ app.get('/delete-item', (req, res) =>{
         console.log(err);
     });
 
-    // res.redirect('http://127.0.0.1:5555/customers.html');
+    res.redirect('https://jasons-invoice.herokuapp.com/customers.html');
 });
 
 
@@ -232,7 +226,7 @@ app.get('/invoices', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('http://127.0.0.1:5555/products.html');
+        // res.redirect('https://jasons-invoice.herokuapp.com/products.html');
 });
 
 app.get('/find-invoice', (req, res) =>{
@@ -245,7 +239,7 @@ app.get('/find-invoice', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('http://127.0.0.1:5555/products.html');
+        // res.redirect('https://jasons-invoice.herokuapp.com/products.html');
 });
 
 
@@ -265,7 +259,7 @@ app.get('/add-invoices', (req, res) =>{
             console.log(err);
         });
 
-        // res.redirect('http://127.0.0.1:5555/invoices.html');
+        // res.redirect('https://jasons-invoice.herokuapp.com/invoices.html');
 });
 
 
@@ -279,7 +273,7 @@ app.get('/get-company', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('http://127.0.0.1:5555/products.html');
+        // res.redirect('https://jasons-invoice.herokuapp.com/products.html');
 });
 
 app.get('/get-customer', (req, res) =>{
@@ -292,6 +286,6 @@ app.get('/get-customer', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('http://127.0.0.1:5555/products.html');
+        // res.redirect('https://jasons-invoice.herokuapp.com/products.html');
 });
 
