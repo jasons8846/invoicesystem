@@ -58,7 +58,7 @@ app.get('/add-item', (req, res) => {
             console.log(err);
         });
 
-        res.redirect('http://127.0.0.1:5555/customers');
+        // res.redirect('http://127.0.0.1:5555/customers');
 }); 
 
 app.get('/all-items', (req, res) =>{
@@ -152,7 +152,7 @@ app.get('/add-product', (req, res) => {
             console.log(err);
         });
 
-        res.redirect('http://127.0.0.1:5555/products.html');
+        // res.redirect('http://127.0.0.1:5555/products.html');
 });
 
 app.get('/delete-product', (req, res) =>{
@@ -162,7 +162,7 @@ app.get('/delete-product', (req, res) =>{
         console.log(err);
     });
 
-    res.redirect('http://127.0.0.1:5555/products.html');
+    // res.redirect('http://127.0.0.1:5555/products.html');
 });
 
 
@@ -173,7 +173,7 @@ app.get('/delete-item', (req, res) =>{
         console.log(err);
     });
 
-    res.redirect('http://127.0.0.1:5555/customers.html');
+    // res.redirect('http://127.0.0.1:5555/customers.html');
 });
 
 
