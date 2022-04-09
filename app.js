@@ -57,7 +57,7 @@ app.get('/add-item', (req, res) => {
             console.log(err);
         });
 
-        res.redirect('https://jasons-invoice.herokuapp.com/customers');
+        res.redirect('https://rainbow-eclair-63b898.netlify.app//customers');
 }); 
 
 app.get('/all-items', (req, res) =>{
@@ -79,7 +79,7 @@ app.get('/products', (req, res) =>{
             console.log(err);
         })
 
-        res.redirect('https://jasons-invoice.herokuapp.com/products.html');
+        res.redirect('https://rainbow-eclair-63b898.netlify.app//products.html');
 });
 
 
@@ -151,7 +151,7 @@ app.get('/add-product', (req, res) => {
             console.log(err);
         });
 
-        res.redirect('https://jasons-invoice.herokuapp.com/products.html');
+        res.redirect('https://rainbow-eclair-63b898.netlify.app//products.html');
 });
 
 app.get('/delete-product', (req, res) =>{
@@ -161,7 +161,7 @@ app.get('/delete-product', (req, res) =>{
         console.log(err);
     });
 
-    res.redirect('https://jasons-invoice.herokuapp.com/products.html');
+    res.redirect('https://rainbow-eclair-63b898.netlify.app//products.html');
 });
 
 
@@ -172,7 +172,7 @@ app.get('/delete-item', (req, res) =>{
         console.log(err);
     });
 
-    res.redirect('https://jasons-invoice.herokuapp.com/customers.html');
+    res.redirect('https://rainbow-eclair-63b898.netlify.app//customers.html');
 });
 
 
@@ -226,7 +226,7 @@ app.get('/invoices', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('https://jasons-invoice.herokuapp.com/products.html');
+        // res.redirect('https://rainbow-eclair-63b898.netlify.app//products.html');
 });
 
 app.get('/find-invoice', (req, res) =>{
@@ -239,7 +239,7 @@ app.get('/find-invoice', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('https://jasons-invoice.herokuapp.com/products.html');
+        // res.redirect('https://rainbow-eclair-63b898.netlify.app//products.html');
 });
 
 
@@ -259,7 +259,7 @@ app.get('/add-invoices', (req, res) =>{
             console.log(err);
         });
 
-        // res.redirect('https://jasons-invoice.herokuapp.com/invoices.html');
+        // res.redirect('https://rainbow-eclair-63b898.netlify.app//invoices.html');
 });
 
 
@@ -273,7 +273,7 @@ app.get('/get-company', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('https://jasons-invoice.herokuapp.com/products.html');
+        // res.redirect('https://rainbow-eclair-63b898.netlify.app//products.html');
 });
 
 app.get('/get-customer', (req, res) =>{
@@ -286,6 +286,6 @@ app.get('/get-customer', (req, res) =>{
             console.log(err);
         })
 
-        // res.redirect('https://jasons-invoice.herokuapp.com/products.html');
+        // res.redirect('https://rainbow-eclair-63b898.netlify.app//products.html');
 });
 
