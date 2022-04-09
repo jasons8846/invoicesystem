@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Add/Edit Invoice</title>
+</head>
+<style>
+
+.select-withd{
+      width: 25%;
+      margin-left: 1rem;
+  }
+    #company-error, #customer-error{
+      background-color: rgb(255, 161, 161);
+      width: 30%;
+      border-radius: 5px;
+      padding: 0rem;
+      text-align: center;
+      margin-left: 30%;
+      margin-top: -5%;
+      font-size: 24px;
+      color: rgb(250, 0, 0);
+      visibility: hidden;
+      position: absolute;
+      z-index: 10;
+    }
+
+    #company-adress li{
+      height: 2rem;
+    }
+
+    #customer-form{
+      margin: 1rem;
+      display: flex;
+    }
+
+    #ship-address-outline{
+      margin-left: 5rem;
+    }
+
+    td{
+      width: 20rem;
+    }
+
+    .dft-lbl{
+      position: absolute;
+      margin-left: 1rem;
+      margin-top: 0.5rem;
+      visibility: hidden;
+    }
+
+    .dft-div{
+      margin-top: 0.5rem;
+    }
+
+    .invTot{
+      font-weight: bold;
+    }
+
+    .delete{
+      margin: 0rem;
+    }
+
+    .del-col{
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      width: 0rem !important;
+    }
+
+    #save-btn, #get-inv, #save-pdf{
+      margin-top: 1rem;
+      min-width: 5rem;
+    }
+
+    
+</style>
+<body id="target">
+    <h1>Invoices</h1>
+
+      <div class="input-group select-withd">
+        <select id="company-name" class="form-select" aria-label="Example select with button addon" onchange="getData()">
+          <option selected>Select Company ...</option>
+          <option value="Sequence Golf Carts">Sequence Golf Carts</option>
+          <option value="Accelsior">Accelsior</option>
+          <option value="Coding for Fun">Coding for Fun</option>
+        </select>
+      </div>
+    
+      <div class="select-withd">
+        <ul id="company-adress" class="list-group list-group-flush"></ul>
+      </div>
+
+    <div id="company-error">
+        <p>Error obtaining company data</p>
+    </div>
+<br>
+    <div class="input-group select-withd">
+      <select id="customer-name" class="form-select" aria-label="Example select with button addon" onchange="getCustomerData()">
+        <option selected>Select Customer ...</option>
+      </select>
+    </div>
+    <form id="customer-form">
+      <div class="mb-3">
+      <label for="invoice-id" class="form-label">Invoice Nr</label>
+      <select id="invoice-id" class="form-select" aria-label="Example select with button addon" onchange="">
+        <option selected>Select Invoice ...</option>
+      </select>
+      <label for="cust-email" class="form-label">Email address</label>
+      <input id="cust-email" type="email" class="form-control"  aria-describedby="emailHelp">
+      <label for="cust-phone" class="form-label">Phone</label>
+      <input id="cust-phone" class="form-control" type="text" aria-label="default input example">
+      <label for="cust-adress" class="form-label">Adress</label>
+      <input id="cust-adress" class="form-control" type="text" aria-label="default input example">
+      </div>
+
+      <div id="ship-address-outline">
+      <label for="ship-address" class="form-label">Shipping Address</label>
+      <input id="ship-address" type="text" class="form-control"  aria-describedby="emailHelp">
+      <button id="get-inv" type="button" class="btn btn-primary" onclick="getInvoiceData()">Get Invoice</button>
+      <button id="save-btn" type="button" class="btn btn-success" onclick="saveDatatoDB()">Save</button>
+      <button id="save-pdf" type="button" class="btn btn-danger" onclick="HTMLtoPDF()">Save PDF</button>
+      </div>
+      
+    </form>
+
+  <div id="customer-error">
+    <p>Error obtaining customer data</p>
+</div>
+
+<div id="invoice-details">
+  <table id="invoice-list" class="table table-striped">
+      <thead>
+        <th scope="col"></th>
+         <th scope="col">Product</th>
+         <th scope="col">Units</th>
+         <th scope="col">Discount</th>
+         <th scope="col">Price</th>
+         <th scope="col">Total</th>
+      </thead>
+      <tbody id="table-body">
+          <tr id="default-tr">
+            <td id="default-del-1" class="del-col">
+              <input  type="submit" class="delete btn btn-danger" value="delete" onclick="deleteItem(this)">
+            </td>
+            <td id="default-td-1">
+              <label id="default-label-1" for="default-input-1" class="dft-lbl" ></label>
+              <input id="default-input-1" type="text" class="form-control dft-inp" aria-label="default-label-1" >
+            </td>
+            <td id="default-td-2">
+              <label id="default-label-2" for="default-input-2" class="dft-lbl" ></label>
+              <input id="default-input-2" type="text" class="form-control dft-inp" aria-label="default-label-2">
+            </td>
+            <td id="default-td-3">
+              <label id="default-label-3" for="default-input-3" class="dft-lbl"></label>
+              <input id="default-input-3" type="text" class="form-control dft-inp" aria-label="default-label-3">
+            </td>
+            <td id="default-td-4">
+              <label id="default-label-4" for="default-input-4" class="dft-lbl" ></label>
+              <input id="default-input-4" type="text" class="form-control dft-inp" onchange="updateProdList()"
+              aria-label="default-label-4">
+            </td>
+           
+            <td id="default-td-5">
+              <div id="default-label-5" class="dft-div">0</div>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td id="inv-total-desc" class="invTot">Total</td>
+            <td id="inv-total" class="invTot">0</td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+  let cpy_info = document.getElementById("company-name");
+  let cust_info = document.getElementById("customer-name");
+  let cust_email_info = document.getElementById("cust-email");
+  let cust_phone_info = document.getElementById("cust-phone");
+  let cust_adress_info = document.getElementById("cust-adress");
+  let ship_adress_info = document.getElementById("ship-address");
+  let inv_info = document.getElementById("invoice-id");
+  let inv_total = 0;
+  
+
+
+  function HTMLtoPDF(){
+    let tgt = document.getElementById("target");
+  
+    var opt = {
+        margin: 1,
+        filename: 'invoice.pdf',
+        jsPDF:  {uni: 'in', format: 'letter', orientation: 'portrait'}
+    }
+    html2pdf().set(opt).from(tgt).save();
+    
+};
+
+  function saveDatatoDB(){
+    const tableBody = document.getElementById('table-body');
+    var rowcount = tableBody.rows.length-1;
+
+    let api_url1 = 'https://jasons-invoice.herokuapp.com/update-invoice?invoice_nr=' + parseInt(inv_info.value.substr(-3)) + 
+                    '&customer=' + cust_info.value + 
+                    '&shipadress=' + ship_adress_info.value  ;
+
+                    const response = fetch(api_url1);
+
+    for(let i = 0; i < rowcount-1; i++){
+      let row = tableBody.rows[i];
+
+       let api_url = 'https://jasons-invoice.herokuapp.com/add-inv-prod?invoice_nr=' + parseInt(inv_info.value.substr(-3)) + 
+                    '&prod=' + row.cells[1].firstElementChild.innerHTML + '&discount=' + row.cells[3].firstElementChild.innerHTML + '&units=' + row.cells[2].firstElementChild.innerHTML + '&price=' + row.cells[4].firstElementChild.innerHTML ;
+
+      const response = fetch(api_url);
+                 
+    }
+
+    getInvoiceData();
+      calcTotal();
+      deactivateSave();
+
+  }
+
+  function deactivateSave(){
+      let saveBtn = document.getElementById("save-btn");
+
+      saveBtn.classList.remove('btn-success');
+      saveBtn.classList.add('btn-secondary');
+  }
+
+  function activateSave(){
+      let saveBtn = document.getElementById("save-btn");
+
+      saveBtn.classList.remove('btn-secondary');
+      saveBtn.classList.add('btn-success');
+  }
+
+  function deleteItem(e){
+    const tableBody = document.getElementById('table-body');
+    let delProd = '';
+    delProd = e.parentNode.parentNode.cells[1].firstElementChild.innerHTML;
+    let api_url1 = 'https://jasons-invoice.herokuapp.com/del-inv-prod?invoice_nr=' + parseInt(inv_info.value.substr(-3)) + 
+                     '&prod=' + delProd ;
+     const response = fetch(api_url1);
+
+     tableBody.deleteRow(e.parentNode.parentNode.rowIndex-1);
+
+  
+     calcTotal();
+  }
+
+  function deleteAllRows(){
+    const tableBody = document.getElementById('table-body');
+    var rowcount = tableBody.rows.length-1;
+
+      tableBody.innerHTML = " <tr id='default-tr'>" +
+            "<td id='default-del-1' class='del-col'>" +
+             "<input  type='submit' class='delete btn btn-danger' value='delete' onclick='deleteItem(this)'>" +
+            "</td>" +
+            "<td id='default-td-1'>" +
+              "<label id='default-label-1' for='default-input-1' class='dft-lbl' ></label>" +
+              "<input id='default-input-1' type='text' class='form-control dft-inp' >" +
+            "</td>" +
+            "<td id='default-td-2'>" +
+              "<label id='default-label-2' for='default-input-2' class='dft-lbl' ></label>" +
+              "<input id='default-input-2' type='text' class='form-control dft-inp'>" +
+            "</td>" +
+            "<td id='default-td-3'>" +
+              "<label id='default-label-3' for='default-input-3' class='dft-lbl'></label>" +
+              "<input id='default-input-3' type='text' class='form-control dft-inp' >" +
+            "</td>" +
+            "<td id='default-td-4'>" +
+             "<label id='default-label-4' for='default-input-4' class='dft-lbl' ></label>" +
+              "<input id='default-input-4' type='text' class='form-control dft-inp' onchange='updateProdList()'>" +
+            "</td>" +
+           
+            "<td id='default-td-5'>" +
+              "<div id='default-label-5' class='dft-div'>0</div>" +
+               
+            "</td>" +
+
+          "</tr>" +
+          "<tr>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td id='inv-total-desc' class='invTot'>Total</td>" +
+            "<td id='inv-total' class='invTot'>0</td>" +
+            "</tr>";
+
+  }
+
+  async function getInvoiceData(){
+
+    deleteAllRows();
+
+    let inv_tot = document.getElementById("inv-total");
+    let api_url = 'https://jasons-invoice.herokuapp.com/find-invoice?invoice_nr=' + parseInt(inv_info.value.substr(-3));
+    const response = await fetch(api_url);
+    const data = await response.json();
+
+    let api_url2 = 'https://jasons-invoice.herokuapp.com/find-inv-prod?invoice_nr=' + parseInt(inv_info.value.substr(-3));
+    const response2 = await fetch(api_url2);
+    const data2 = await response2.json();
+
+     let prod_dtls = data2;
+
+    cust_info.value = data[0].customer;
+     ship_adress_info.value = data[0].ship_adress;
+
+
+     for(var i in prod_dtls){
+
+      const tableBody = document.getElementById('table-body');
+       var rowcount = tableBody.rows.length-1;
+
+       var row = tableBody.insertRow(0);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var cell4 = row.insertCell(3);
+      var cell5 = row.insertCell(4);
+      var cell6 = row.insertCell(5);
+
+         cell1.innerHTML = "<input  type='submit' class='delete btn btn-danger' value='delete' onclick='deleteItem(this)'>"
+         cell2.innerHTML = "<label class='dft-lbl' style='visibility: visible' onClick='editProdList(this)'>" + prod_dtls[i].product_name + "</label><input class='form-control dft-inp add-done' style='visibility: hidden' value='" + prod_dtls[i].product_name + "'></input>"
+         cell3.innerHTML = "<label class='dft-lbl' style='visibility: visible' onClick='editProdList(this)'>" + prod_dtls[i].units + "</label><input class='form-control dft-inp add-done' style='visibility: hidden' value='" + prod_dtls[i].units + "'></input>"
+         cell4.innerHTML = "<label class='dft-lbl' style='visibility: visible' onClick='editProdList(this)'>" + prod_dtls[i].discount + "</label><input class='form-control dft-inp add-done' style='visibility: hidden' value='" + prod_dtls[i].discount + "'></input>"
+         cell5.innerHTML = "<label class='dft-lbl' style='visibility: visible' onClick='editProdList(this)'>" + prod_dtls[i].price + "</label><input class='form-control dft-inp add-done' style='visibility: hidden' value='" + prod_dtls[i].price + "'></input>"
+         cell6.innerHTML = "<div class='dft-div'>" + Math.round(100 * (prod_dtls[i].units * prod_dtls[i].price - prod_dtls[i].discount))/100 + "</div>";
+     }
+
+     var x = 0;
+     for(var i in prod_dtls){
+      x = x + Math.round(100 * (prod_dtls[i].units * prod_dtls[i].price - prod_dtls[i].discount))/100
+     }
+
+     inv_tot.innerHTML = Math.round(x*100)/100;
+
+     getCustomerData();
+     addEventList();
+  }
+
+
+  
+  async function getData(){
+        let api_url = 'https://jasons-invoice.herokuapp.com/get-company?company_name=' + cpy_info.value;
+        const comp_adress = document.getElementById("company-adress");
+        const comp_error = document.getElementById("company-error");
+        const response = await fetch(api_url);
+        const data = await response.json();
+
+        comp_adress.innerHTML ="";
+
+        // Handle Error when no data are found
+
+        if(data.length === 0){
+          comp_error.style.visibility = "visible";
+          setTimeout(hideError, 3000);
+        };
+
+        function hideError(){
+          comp_error.style.visibility = "hidden";
+        }
+
+        for(var i in data[0].company_address){
+            var li = document.createElement('li');
+            li.appendChild(document.createTextNode(data[0].company_address[i]));
+            li.classList.add("list-group-item")
+            comp_adress.appendChild(li);
+        }
+
+  }
+
+
+  async function getCustomerList(){
+    let api_url = 'https://jasons-invoice.herokuapp.com/all-items';
+    let api_url2 = 'https://jasons-invoice.herokuapp.com/invoices';
+    const response = await fetch(api_url);
+    const data = await response.json();
+
+    
+    for (var i in data){
+      const cust_name = document.getElementById("customer-name");
+      var opt = document.createElement('option');
+      opt.appendChild(document.createTextNode(data[i].customer_name));
+      opt.setAttribute('value',data[i].customer_name);
+      cust_name.appendChild(opt);
+    }
+
+
+    const response2 = await fetch(api_url2);
+    const data2 = await response2.json();
+  
+    let inv_count = 0;
+    
+    for (var i in data2){
+      const inv_nr = document.getElementById("invoice-id");
+      var opt = document.createElement('option');
+      opt.appendChild(document.createTextNode("INV-" + data2[i].inv_id.toString().padStart(3,"0")));
+      opt.setAttribute('value',"INV-" + data2[i].inv_id.toString().padStart(3,"0"));
+      inv_nr.appendChild(opt);
+    }
+
+    const inv_nr = document.getElementById("invoice-id");
+      
+     inv_count = Object.keys(data2).length + 1;
+     next_inv = "INV-" + inv_count.toString().padStart(3,"0");
+
+    var opt = document.createElement('option');
+    opt.appendChild(document.createTextNode(next_inv));
+    opt.setAttribute('value',next_inv);
+    inv_nr.appendChild(opt);
+    inv_nr.value = next_inv
+
+  }
+
+  async function getCustomerData(){
+    let api_url = 'https://jasons-invoice.herokuapp.com/get-customer?customer_name=' + cust_info.value;
+        const cust_email = document.getElementById("cust-email");
+        const cust_phone = document.getElementById("cust-phone");
+        const cust_adress = document.getElementById("cust-adress");
+        const cust_error = document.getElementById("customer-error");
+        const response = await fetch(api_url);
+        const data = await response.json();
+
+        cust_email.innerHTML ="";
+
+        if(data.length === 0){
+          cust_error.style.visibility = "visible";
+          setTimeout(hideError, 3000);
+        };
+
+        function hideError(){
+          cust_error.style.visibility = "hidden";
+        }
+
+       cust_email.value = data[0].customer_email;
+       cust_phone.value = data[0].customer_phone;
+       cust_adress.value = data[0].customer_adress;
+
+  }
+
+  function updateProdList(){
+
+
+    const tableBody = document.getElementById('table-body');
+    const inp = document.querySelectorAll('input.dft-inp');
+    const lb = document.querySelectorAll('label.dft-lbl');
+    const tot = document.querySelectorAll('.dft-div');
+    const invtot = document.querySelector('#inv-total');
+    var rowcount = tableBody.rows.length-1;
+
+    
+  var row = tableBody.insertRow(rowcount);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+  var cell4 = row.insertCell(3);
+  var cell5 = row.insertCell(4);
+  var cell6 = row.insertCell(5);
+
+  cell1.innerHTML = "<input  type='submit' class='delete btn btn-danger' value='delete' onclick='deleteItem(this)'>"
+  cell2.innerHTML = "<label class='dft-lbl' onClick='editProdList(this)'></label><input class='form-control dft-inp'></input>"
+  cell3.innerHTML = "<label class='dft-lbl' onClick='editProdList(this)'></label><input class='form-control dft-inp'></input>"
+  cell4.innerHTML = "<label class='dft-lbl' onClick='editProdList(this)'></label><input class='form-control dft-inp'></input>"
+  cell5.innerHTML = "<label class='dft-lbl' onClick='editProdList(this)'></label><input class='form-control dft-inp' onchange='updateProdList()'></input>"
+  cell6.innerHTML = "<div class='dft-div'>0</div>";
+
+    for (i = 0; i < inp.length; i++){
+       lb[i].innerHTML = inp[i].value;
+       inp[i].style.visibility = "hidden";
+       inp[i].classList.add("add-done");
+       if (i === inp.length - 1){
+        inp[i].removeAttribute("onchange");
+       }
+    }
+
+    for (i = 0; i < lb.length; i++){
+       lb[i].style.visibility = "visible";
+    }
+
+    tot[rowcount-1].innerHTML = (inp[rowcount*4-3].value * inp[rowcount*4-1].value) - inp[rowcount*4-2].value;
+
+    inv_total = 0;
+    inv_total = inv_total + (inp[rowcount*4-3].value * inp[rowcount*4-1].value) - inp[rowcount*4-2].value
+
+    let saveBtn = document.getElementById("save-btn");
+     
+    saveBtn.classList.remove('btn-secondary');
+    saveBtn.classList.add('btn-success');
+
+    calcTotal();
+    addEventList();
+    activateSave();
+    
+
+  }
+
+  async function calcTotal(){
+    
+    const inv_tot = document.querySelector('#inv-total');
+    const tableBody = document.getElementById('table-body');
+    var rowcount = tableBody.rows.length-1;
+    var x = 0;
+
+    for(let i = 0; i < rowcount-1; i++){
+      let row = tableBody.rows[i];
+       x = x + parseFloat(row.cells[5].firstElementChild.innerHTML);
+       inv_tot.innerHTML = x;
+    }
+
+  }
+
+  function addEventList(){
+    let input_class = document.querySelectorAll(".add-done");
+    let label_class = document.querySelectorAll(".dft-lbl");
+
+    for(i = 0; i < input_class.length; i++){
+      input_class[i].addEventListener("mouseleave", editProdListDone);
+    }
+
+    for(i = 0; i < label_class.length; i++){
+      label_class[i].addEventListener("mouseenter", editProdList);
+    }
+
+  }
+
+  function editProdList(target){
+
+    let lb = target.currentTarget;
+      let inp = target.currentTarget.nextElementSibling;
+
+     inp.style.visibility = "visible";
+     lb.style.visibility = "hidden";
+  }
+
+  function editProdListDone(target){
+    let inp = target.currentTarget;
+     let lb = target.currentTarget.previousElementSibling;
+
+    lb.innerHTML = inp.value
+    inp.style.visibility = "hidden";
+    lb.style.visibility = "visible";
+  }
+
+  getCustomerList();
+
+
+</script>
+</html>
